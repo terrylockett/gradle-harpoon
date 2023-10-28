@@ -29,7 +29,7 @@
 
     </extensions>
     <actions>
-        <action id="ca.terrylockett.gradleharpoon.action.TestAction" class="ca.terrylockett.gradleharpoon.action.TestAction"
+        <action id="ca.terrylockett.gradleharpoon.action.GradleModuleAction" class="ca.terrylockett.gradleharpoon.action.GradleModuleAction"
                 text="Test Action" description="Tesitng Actions">
             <add-to-group group-id="ToolsMenu" anchor="first"/>
         </action>
