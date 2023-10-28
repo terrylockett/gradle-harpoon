@@ -1,0 +1,63 @@
+<!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
+<idea-plugin>
+    <!-- Unique identifier of the plugin. It should be FQN. It cannot be changed between the plugin versions. -->
+    <id>ca.terrylockett.GradleHarpoon</id>
+
+    <!-- Public plugin name should be written in Title Case.
+         Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-name -->
+    <name>GradleHarpoon</name>
+
+    <!-- A displayed Vendor name or Organization ID displayed on the Plugins Page. -->
+    <vendor email="support@yourcompany.com" url="https://www.yourcompany.com">YourCompany</vendor>
+
+    <!-- Description of the plugin displayed on the Plugin Page and IDE Plugin Manager.
+         Simple HTML elements (text formatting, paragraphs, and lists) can be added inside of <![CDATA[ ]]> tag.
+         Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-description -->
+    <description><![CDATA[
+    Enter short description for your plugin here.<br>
+    <em>most HTML tags may be used</em>
+  ]]></description>
+
+    <!-- Product and plugin compatibility requirements.
+         Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.gradle</depends>
+
+    <!-- Extension points defined by the plugin.
+         Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
+    <extensions defaultExtensionNs="com.intellij">
+
+    </extensions>
+    <actions>
+        <action id="ca.terrylockett.gradleharpoon.action.TestAction" class="ca.terrylockett.gradleharpoon.action.TestAction"
+                text="Test Action" description="Tesitng Actions">
+            <add-to-group group-id="ToolsMenu" anchor="first"/>
+        </action>
+        <action id="ca.terrylockett.gradleharpoon.GetGradleProjectsTest"
+                class="ca.terrylockett.gradleharpoon.GetGradleProjectsTest" text="List Gradle Projects"
+                description="blah blah blah">
+            <add-to-group group-id="ToolsMenu" anchor="first"/>
+        </action>
+        <action id="ca.terrylockett.gradleharpoon.PopupTest" class="ca.terrylockett.gradleharpoon.PopupTest"
+                text="Create pop-up" description="asjdkjas">
+            <add-to-group group-id="ToolsMenu" anchor="first"/>
+        </action>
+        <group id="ca.terrylockett.gradleharpoon.actiongroups.GradleModuleActionGroup"
+               class="ca.terrylockett.gradleharpoon.actiongroups.GradleModuleActionGroup" text="GradleModuleActionGroup"/>
+        <group id="ca.terrylockett.gradleharpoon.actiongroups.GradleTasksActionGroup"
+               class="ca.terrylockett.gradleharpoon.actiongroups.GradleTasksActionGroup" text="GradleTasksActionGroup"/>
+        <action id="ca.terrylockett.gradleharpoon.action.GradleTaskAction"
+                class="ca.terrylockett.gradleharpoon.action.GradleTaskAction" text="GradleTaskAction">
+            <add-to-group group-id="ToolsMenu" anchor="first"/>
+        </action>
+        <action id="ca.terrylockett.gradleharpoon.popup.EditHotkeyPopup"
+                class="ca.terrylockett.gradleharpoon.popup.EditHotkeyPopup" text="Edit Harpoon Hotkey"
+                description="Open Edit Harpon Shortcut Window">
+            <add-to-group group-id="ToolsMenu" anchor="first"/>
+        </action>
+        <action id="ca.terrylockett.gradleharpoon.popup.RunHotkeyPopup"
+                class="ca.terrylockett.gradleharpoon.popup.RunHotkeyPopup" text="Run Bookmark Task">
+            <add-to-group group-id="ToolsMenu" anchor="first"/>
+        </action>
+    </actions>
+</idea-plugin>
