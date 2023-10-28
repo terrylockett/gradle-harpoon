@@ -1,6 +1,7 @@
 package ca.terrylockett.gradleharpoon.actiongroups;
 
 import ca.terrylockett.gradleharpoon.action.GradleModuleAction;
+import ca.terrylockett.gradleharpoon.configurations.HarpoonConfigurationsUtil;
 import com.intellij.openapi.actionSystem.ActionGroup;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -28,26 +29,28 @@ public class GradleModuleActionGroup extends ActionGroup {
 
 	@Override
 	public AnAction @NotNull [] getChildren(@Nullable AnActionEvent e) {
-		var list = getModulePaths(e);
+		var allModulePaths = getModulePaths(e);
 
 		ArrayList<AnAction> actionsList = new ArrayList<>();
-		for (String module : list) {
-			String name = "";
-			String taskName = "";
-			String rawCommand = "test";
-			String projectPath = "";
-
-
-			taskName = module + " [" + rawCommand + "]";
-			name = taskName;
-			projectPath = module;
-
-			actionsList.add(new GradleModuleAction(name, taskName, rawCommand, projectPath, hotkeyIndex));
+		for (String module : allModulePaths) {
+			String name = getModuleNameFromPath(e, module);
+			actionsList.add(new GradleModuleAction(name, module, hotkeyIndex));
 		}
 
-		return actionsList.toArray(new AnAction[actionsList.size()]);
+		return actionsList.toArray(new AnAction[0]);
 	}
 
+	private String getModuleNameFromPath(AnActionEvent e, String modulePath) {
+		String rootProjectPath = HarpoonConfigurationsUtil.getRootProjectPath(e);
+		String name = "";
+		if (modulePath.equals(rootProjectPath)) {
+			name = Arrays.stream(rootProjectPath.split("/")).reduce((first, second) -> second).orElse(null);
+		} else {
+			name = Arrays.stream(modulePath.split("/")).reduce((first, second) -> second).orElse(null);
+		}
+		return name;
+	}
+	
 	private List<String> getModulePaths(AnActionEvent e) {
 		var project = e.getProject();
 		GradleSettings gs = GradleSettings.getInstance(project);
@@ -59,12 +62,7 @@ public class GradleModuleActionGroup extends ActionGroup {
 		String baseName = Arrays.stream(basePath.split("/")).reduce((first, second) -> second).orElse(null);
 		config.getModules();
 
-		List<String> returnList = new ArrayList<>();
-		for (String module : config.getModules()) {
-			returnList.add(module);
-		}
-
-		return returnList;
+		return new ArrayList<>(config.getModules());
 	}
 
 }

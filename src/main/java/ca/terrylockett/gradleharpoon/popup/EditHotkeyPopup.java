@@ -1,6 +1,6 @@
 package ca.terrylockett.gradleharpoon.popup;
 
-import ca.terrylockett.gradleharpoon.configurations.SavedRunConfigurations;
+import ca.terrylockett.gradleharpoon.configurations.HarpoonConfigurationsUtil;
 import ca.terrylockett.gradleharpoon.actiongroups.GradleModuleActionGroup;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -16,7 +16,7 @@ public class EditHotkeyPopup extends AnAction {
 	@Override
 	public void actionPerformed(@NotNull AnActionEvent e) {
 
-		List<String> list = SavedRunConfigurations.getList(e);
+		List<String> list = HarpoonConfigurationsUtil.getList(e);
 
 		JBPopupFactory.getInstance()
 				.createPopupChooserBuilder(list)

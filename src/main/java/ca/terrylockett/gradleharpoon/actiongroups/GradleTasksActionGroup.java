@@ -14,11 +14,10 @@ import java.util.List;
 
 public class GradleTasksActionGroup extends ActionGroup {
 
-	String moduleName = "/unimplemented";
+	String moduleName = "";
 	int hotkeyIndex = -1;
 
-	public GradleTasksActionGroup() {
-	}
+	public GradleTasksActionGroup() {}
 
 	public GradleTasksActionGroup(String moduleName, int hotkeyIndex) {
 		this.moduleName = moduleName;
@@ -27,48 +26,48 @@ public class GradleTasksActionGroup extends ActionGroup {
 
 	@Override
 	public AnAction @NotNull [] getChildren(@Nullable AnActionEvent e) {
-
+		
 		List<String> taskNames = getTaskNames(e);
-		System.out.println("tasks found count: " + taskNames.size());
-
-		ArrayList<AnAction> actionsList = new ArrayList<>();
-
-		for (String task : taskNames) {
-			actionsList.add(new GradleTaskAction(moduleName, task, hotkeyIndex));
+		List<AnAction> actionsList = new ArrayList<>();
+		for (String taskName : taskNames) {
+			actionsList.add(new GradleTaskAction(moduleName, taskName, hotkeyIndex));
 		}
 
-		return actionsList.toArray(new AnAction[actionsList.size()]);
+		return actionsList.toArray(new AnAction[0]);
 	}
 
 
-	private List<String> getTaskNames(AnActionEvent event) {
-		var gradleSettings = GradleSettings.getInstance(event.getProject());
+	private List<String> getTaskNames(AnActionEvent e) {
+		var gradleSettings = GradleSettings.getInstance(e.getProject());
 		var gradleProjectSettings = gradleSettings.getLinkedProjectsSettings().stream().findFirst().get();
-		var gradleExtensionSettings = GradleExtensionsSettings.getInstance(event.getProject());
+		var gradleExtensionSettings = GradleExtensionsSettings.getInstance(e.getProject());
 		var rootGradleProject = gradleExtensionSettings.getRootGradleProject(gradleProjectSettings.getExternalProjectPath());
-
+		
+		String gradleModuleName = getModuleGradlePath(e, moduleName);
 		List<String> taskNames = new ArrayList<>();
 
-		String path = gradleProjectSettings.getExternalProjectPath();
-		String taskName = "";
-
-
-		if (moduleName.equals(path)) {
-			taskName = ":";
-		} else {
-			taskName = moduleName.replace(path, "").replace("/", ":");
-		}
-
-
-		if (rootGradleProject.extensions.containsKey(taskName)) {
-			var gradleExtensionData = rootGradleProject.extensions.get(taskName);
+		if (rootGradleProject.extensions.containsKey(gradleModuleName)) {
+			var gradleExtensionData = rootGradleProject.extensions.get(gradleModuleName);
 			var gradleTasks = gradleExtensionData.tasksMap.keySet();
-			for (var task : gradleTasks) {
-				taskNames.add(task);
-			}
+			taskNames.addAll(gradleTasks);
 		}
 
 		return taskNames;
+	}
+	
+	private String getModuleGradlePath(AnActionEvent e, String modulePath) {
+		var gradleSettings = GradleSettings.getInstance(e.getProject());
+		var gradleProjectSettings = gradleSettings.getLinkedProjectsSettings().stream().findFirst().get();
+		String path = gradleProjectSettings.getExternalProjectPath();
+		
+		String gradleModuleName;
+		if (modulePath.equals(path)) {
+			gradleModuleName = ":";
+		} else {
+			gradleModuleName = modulePath.replace(path, "").replace("/", ":");
+		}
+		
+		return gradleModuleName;
 	}
 
 }
