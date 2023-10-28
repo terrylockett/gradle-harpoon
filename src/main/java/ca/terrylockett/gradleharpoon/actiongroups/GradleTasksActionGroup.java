@@ -13,33 +13,34 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GradleTasksActionGroup extends ActionGroup {
-	
+
 	String moduleName = "/unimplemented";
 	int hotkeyIndex = -1;
-	
-	public GradleTasksActionGroup() {}
-	public GradleTasksActionGroup(String moduleName, int hotkeyIndex){
-		System.out.println("Task Action group created for module: "+ moduleName);
+
+	public GradleTasksActionGroup() {
+	}
+
+	public GradleTasksActionGroup(String moduleName, int hotkeyIndex) {
 		this.moduleName = moduleName;
 		this.hotkeyIndex = hotkeyIndex;
 	}
-	
+
 	@Override
 	public AnAction @NotNull [] getChildren(@Nullable AnActionEvent e) {
-		
+
 		List<String> taskNames = getTaskNames(e);
 		System.out.println("tasks found count: " + taskNames.size());
 
 		ArrayList<AnAction> actionsList = new ArrayList<>();
-		
-		for(String task : taskNames) {
+
+		for (String task : taskNames) {
 			actionsList.add(new GradleTaskAction(moduleName, task, hotkeyIndex));
 		}
 
 		return actionsList.toArray(new AnAction[actionsList.size()]);
 	}
-	
-	
+
+
 	private List<String> getTaskNames(AnActionEvent event) {
 		var gradleSettings = GradleSettings.getInstance(event.getProject());
 		var gradleProjectSettings = gradleSettings.getLinkedProjectsSettings().stream().findFirst().get();
@@ -57,17 +58,17 @@ public class GradleTasksActionGroup extends ActionGroup {
 		} else {
 			taskName = moduleName.replace(path, "").replace("/", ":");
 		}
-			
-		
-		if( rootGradleProject.extensions.containsKey(taskName)) {
+
+
+		if (rootGradleProject.extensions.containsKey(taskName)) {
 			var gradleExtensionData = rootGradleProject.extensions.get(taskName);
 			var gradleTasks = gradleExtensionData.tasksMap.keySet();
-			for(var task : gradleTasks) {
+			for (var task : gradleTasks) {
 				taskNames.add(task);
 			}
 		}
-		
+
 		return taskNames;
 	}
-	
+
 }

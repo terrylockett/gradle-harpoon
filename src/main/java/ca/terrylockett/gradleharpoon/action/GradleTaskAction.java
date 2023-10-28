@@ -12,18 +12,18 @@ import org.jetbrains.plugins.gradle.settings.GradleSettings;
 import java.util.Arrays;
 
 public class GradleTaskAction extends AnAction {
-	
+
 	public static final String PERSISTENCE_KEY = "ca.terrylockett.gradleharpoon.task.";
-	
+
 	String module = "task: module not implemented";
 	String taskName = "Task name not implemented";
 	int hotkeyIndex = -1;
-	
-	
+
+
 	public GradleTaskAction() {
 		super();
 	}
-	
+
 	public GradleTaskAction(String module, String taskName, int hotkeyIndex) {
 		super(taskName);
 		this.module = module;
@@ -36,7 +36,7 @@ public class GradleTaskAction extends AnAction {
 		// Using the event, evaluate the context,
 		// and enable or disable the action.
 	}
-	
+
 	@Override
 	public void actionPerformed(@NotNull AnActionEvent e) {
 		System.out.println("Task Action Triggered");
@@ -49,26 +49,26 @@ public class GradleTaskAction extends AnAction {
 		var runAndConfig = runManager.createConfiguration("todo", GradleExternalTaskConfigurationType.class);
 		var gradleRunConfiguration = (GradleRunConfiguration) runAndConfig.getConfiguration();
 
-		gradleRunConfiguration.setName(getConfigurationName(module,taskName, e));
+		gradleRunConfiguration.setName(getConfigurationName(module, taskName, e));
 		gradleRunConfiguration.setRawCommandLine(this.taskName);
 		gradleRunConfiguration.getSettings().setExternalProjectPath(this.module);
 
 		runManager.addConfiguration(runAndConfig);
-		
+
 		//store task name
 		var propertiesComponent = PropertiesComponent.getInstance(e.getProject());
-		propertiesComponent.setValue(PERSISTENCE_KEY +hotkeyIndex, this.taskName);
-		
+		propertiesComponent.setValue(PERSISTENCE_KEY + hotkeyIndex, this.taskName);
+
 	}
-	
-	
+
+
 	public static String getConfigurationName(String modulePath, String task, AnActionEvent e) {
 		var gradleSettings = GradleSettings.getInstance(e.getProject());
 		var gradleProjectSettings = gradleSettings.getLinkedProjectsSettings().stream().findFirst().get();
-		
 		String path = gradleProjectSettings.getExternalProjectPath();
-		String rootProjectName = Arrays.stream(path.split("/")).reduce((first, second) -> second).orElse(null);
 		
+		String rootProjectName = Arrays.stream(path.split("/")).reduce((first, second) -> second).orElse(null);
+
 		String gradlePath = "";
 		if (modulePath.equals(path)) {
 			gradlePath = ":";
@@ -76,7 +76,7 @@ public class GradleTaskAction extends AnAction {
 			gradlePath = modulePath.replace(path, "").replace("/", ":");
 		}
 
-		return rootProjectName+gradlePath+ " [" +task +"]";
+		return rootProjectName + gradlePath + " [" + task + "]";
 	}
-	
+
 }
