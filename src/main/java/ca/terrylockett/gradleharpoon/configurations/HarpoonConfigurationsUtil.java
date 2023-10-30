@@ -60,7 +60,8 @@ public class HarpoonConfigurationsUtil {
 		gradleRunConfiguration.setName(HarpoonConfigurationsUtil.getConfigurationName(modulePath, taskName, e));
 		gradleRunConfiguration.setRawCommandLine(taskName);
 		gradleRunConfiguration.getSettings().setExternalProjectPath(modulePath);
-
+		gradleRunConfiguration.setRunAsTest(true);
+		
 		runManager.addConfiguration(runAndConfig);
 	}
 	
