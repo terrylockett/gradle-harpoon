@@ -33,10 +33,6 @@
                 text="Test Action" description="Tesitng Actions">
             <add-to-group group-id="ToolsMenu" anchor="first"/>
         </action>
-        <action id="ca.terrylockett.gradleharpoon.PopupTest" class="ca.terrylockett.gradleharpoon.PopupTest"
-                text="Create pop-up" description="asjdkjas">
-            <add-to-group group-id="ToolsMenu" anchor="first"/>
-        </action>
         <group id="ca.terrylockett.gradleharpoon.actiongroups.GradleModuleActionGroup"
                class="ca.terrylockett.gradleharpoon.actiongroups.GradleModuleActionGroup" text="GradleModuleActionGroup"/>
         <group id="ca.terrylockett.gradleharpoon.actiongroups.GradleTasksActionGroup"
