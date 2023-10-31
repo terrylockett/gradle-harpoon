@@ -60,9 +60,21 @@ public class HarpoonConfigurationsUtil {
 		gradleRunConfiguration.setName(HarpoonConfigurationsUtil.getConfigurationName(modulePath, taskName, e));
 		gradleRunConfiguration.setRawCommandLine(taskName);
 		gradleRunConfiguration.getSettings().setExternalProjectPath(modulePath);
-		gradleRunConfiguration.setRunAsTest(true);
+		if("test".equals(taskName)) {
+			//TODO probably is a better way to know if something is a "test" task.
+			gradleRunConfiguration.setRunAsTest(true);
+		}
 		
 		runManager.addConfiguration(runAndConfig);
+	}
+
+	public static void resetConfigurations(AnActionEvent e) {
+
+		var propertiesComponent = PropertiesComponent.getInstance(e.getProject());
+		for (int i = 1; i < 6; i++) {
+			propertiesComponent.unsetValue(MODULE_PERSISTENCE_KEY + i);
+			propertiesComponent.unsetValue(TASK_PERSISTENCE_KEY + i);
+		}
 	}
 	
 	public static void setHarpoonTask(AnActionEvent e, String task, int hotkeyIndex) {
@@ -100,5 +112,7 @@ public class HarpoonConfigurationsUtil {
 
 		return path;
 	}
+
+
 	
 }
