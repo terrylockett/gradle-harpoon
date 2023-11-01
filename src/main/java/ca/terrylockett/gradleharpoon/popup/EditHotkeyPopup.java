@@ -23,7 +23,8 @@ public class EditHotkeyPopup extends AnAction {
 				.setVisibleRowCount(5)
 				.setSelectionMode(SINGLE_SELECTION)
 				.setItemChosenCallback(item -> JBPopupFactory.getInstance()
-						.createActionGroupPopup("Harpoon", getModulesList(item), e.getDataContext(), JBPopupFactory.ActionSelectionAid.SPEEDSEARCH, false)
+						.createActionGroupPopup("Harpoon", getModulesList(item), e.getDataContext(),
+								JBPopupFactory.ActionSelectionAid.SPEEDSEARCH, false)
 						.showInFocusCenter())
 				.setSelectionMode(0)
 				.setTitle("Edit Harpoon Hotkeys")

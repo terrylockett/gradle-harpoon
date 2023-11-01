@@ -29,9 +29,9 @@ jobs:
           gradle-home-cache-cleanup: true
       # Build plugin
       - name: Build plugin
-        run: ./gradlew buildPlugin
+        run: ./gradlew buildPlugin -i -s
       # Attach Artifact
       - uses: actions/upload-artifact@v3
         with:
-          name: Package
           path: build/distributions/*.zip
+          if-no-files-found: error
