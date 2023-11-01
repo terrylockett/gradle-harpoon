@@ -53,12 +53,12 @@ public class GradleModuleActionGroup extends ActionGroup {
 	
 	private List<String> getModulePaths(AnActionEvent e) {
 		var project = e.getProject();
-		GradleSettings gs = GradleSettings.getInstance(project);
+		GradleSettings gradleSettings = GradleSettings.getInstance(project);
 
-		var list = gs.getLinkedProjectsSettings();
+		var list = gradleSettings.getLinkedProjectsSettings();
 		var config = list.stream().findFirst().get();
 
-		String basePath = gs.getProject().getBasePath();
+		String basePath = gradleSettings.getProject().getBasePath();
 		String baseName = Arrays.stream(basePath.split("/")).reduce((first, second) -> second).orElse(null);
 		config.getModules();
 
