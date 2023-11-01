@@ -1,0 +1,56 @@
+name: release
+
+on:
+  release:
+    types: [ prereleased, released ]
+
+jobs:
+  release:
+    name: Release Build
+    runs-on: ubuntu-latest
+    steps:
+      # Check out repository
+      - name: Fetch Sources
+        uses: actions/checkout@v4
+      # Validate wrapper
+      - name: Gradle Wrapper Validation
+        uses: gradle/wrapper-validation-action@v1.1.0
+      # Set up Java environment
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: zulu
+          java-version: 17
+      # Setup Gradle
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+        with:
+          gradle-home-cache-cleanup: true
+      # Build plugin
+      - name: Build plugin
+        run: ./gradlew buildPlugin -PisRelease=true
+      # Attach Artifact
+      - uses: actions/upload-artifact@v3
+        with:
+          name: Package
+          path: build/distributions/*.zip
+      # attach release zip
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: build/distributions/*.zip
+          asset_content_type: application/zip

@@ -2,10 +2,15 @@ plugins {
     id("java")
     id("org.jetbrains.kotlin.jvm") version "1.9.0"
     id("org.jetbrains.intellij") version "1.15.0"
+//    id("me.qoomon.git-versioning") version "6.4.2"
 }
 
 group = "ca.terrylockett"
-version = "1.0-SNAPSHOT"
+//version = "0.1.0"
+
+if (!project.hasProperty("isRelease")) {
+    version = "${version}-SNAPSHOT"    
+}
 
 repositories {
     mavenCentral()
