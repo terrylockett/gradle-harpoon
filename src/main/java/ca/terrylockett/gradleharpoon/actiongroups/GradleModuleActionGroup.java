@@ -51,7 +51,7 @@ public class GradleModuleActionGroup extends ActionGroup {
 		return name;
 	}
 	
-	private List<String> getModulePaths(AnActionEvent e) {
+	public static List<String> getModulePaths(AnActionEvent e) {
 		var project = e.getProject();
 		GradleSettings gradleSettings = GradleSettings.getInstance(project);
 

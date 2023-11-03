@@ -7,17 +7,25 @@ import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import org.jetbrains.plugins.gradle.service.execution.GradleExternalTaskConfigurationType;
 import org.jetbrains.plugins.gradle.service.execution.GradleRunConfiguration;
+import org.jetbrains.plugins.gradle.settings.GradleExtensionsSettings;
 import org.jetbrains.plugins.gradle.settings.GradleSettings;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static ca.terrylockett.gradleharpoon.actiongroups.GradleTasksActionGroup.getModuleGradlePath;
+
 public class HarpoonConfigurationsUtil {
 
 	public static final String TASK_PERSISTENCE_KEY = "ca.terrylockett.gradleharpoon.task.";
 	public static final String MODULE_PERSISTENCE_KEY = "ca.terrylockett.gradleharpoon.module.";
 
+	public static final int NUMBER_OF_BOOKMARKS = 5;
+	
+	private static final String TEST_TASK_FQN = "org.gradle.api.tasks.testing.Test";
+	
+	
 	private HarpoonConfigurationsUtil(){}
 	
 	public static List<String> getList(AnActionEvent e) {
@@ -55,19 +63,42 @@ public class HarpoonConfigurationsUtil {
 	public static void addConfigurationToIDE(AnActionEvent e, String modulePath, String taskName) {
 		var runManager = RunManager.getInstance(e.getProject());
 		var runAndConfig = runManager.createConfiguration("todo", GradleExternalTaskConfigurationType.class);
+		runAndConfig.setTemporary(true);
+		
 		var gradleRunConfiguration = (GradleRunConfiguration) runAndConfig.getConfiguration();
-
 		gradleRunConfiguration.setName(HarpoonConfigurationsUtil.getConfigurationName(modulePath, taskName, e));
 		gradleRunConfiguration.setRawCommandLine(taskName);
 		gradleRunConfiguration.getSettings().setExternalProjectPath(modulePath);
-		if("test".equals(taskName)) {
-			//TODO probably is a better way to know if something is a "test" task.
+		
+		if(isTestTask(e, modulePath, taskName)) {
 			gradleRunConfiguration.setRunAsTest(true);
 		}
 		
 		runManager.addConfiguration(runAndConfig);
 	}
 
+	
+	private static boolean isTestTask(AnActionEvent e, String modulePath, String taskName) {
+		var gradleSettings = GradleSettings.getInstance(e.getProject());
+		var gradleProjectSettings = gradleSettings.getLinkedProjectsSettings().stream().findFirst().get();
+		var gradleExtensionSettings = GradleExtensionsSettings.getInstance(e.getProject());
+		var rootGradleProject = gradleExtensionSettings.getRootGradleProject(gradleProjectSettings.getExternalProjectPath());
+
+		String gradleModuleName = getModuleGradlePath(e, modulePath);
+		var gradleExtensionData = rootGradleProject.extensions.get(gradleModuleName);
+		var taskMap = gradleExtensionData.tasksMap;
+		
+		if(!taskMap.containsKey(taskName)){
+			return false;
+		}
+		
+		var task = taskMap.get(taskName);
+		
+		return TEST_TASK_FQN.equals(task.typeFqn);
+	}
+	
+	
+	
 	public static void resetConfigurations(AnActionEvent e) {
 
 		var propertiesComponent = PropertiesComponent.getInstance(e.getProject());

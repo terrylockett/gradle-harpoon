@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+import static ca.terrylockett.gradleharpoon.configurations.HarpoonConfigurationsUtil.NUMBER_OF_BOOKMARKS;
 import static javax.swing.ListSelectionModel.SINGLE_SELECTION;
 
 public class RunHotkeyPopup extends AnAction {
@@ -19,10 +20,10 @@ public class RunHotkeyPopup extends AnAction {
 
 		JBPopupFactory.getInstance()
 				.createPopupChooserBuilder(list)
-				.setVisibleRowCount(5)
+				.setVisibleRowCount(NUMBER_OF_BOOKMARKS)
 				.setSelectionMode(SINGLE_SELECTION)
 				.setItemChosenCallback(getCallBack(e))
-				.setSelectionMode(0)
+				.setSelectionMode(SINGLE_SELECTION)
 				.setTitle("Harpoon Select")
 				.createPopup()
 				.showInFocusCenter();
@@ -31,14 +32,24 @@ public class RunHotkeyPopup extends AnAction {
 
 	private Consumer<String> getCallBack(AnActionEvent e) {
 		return selectedItemValue -> {
-			String configName = getConfigurationName(selectedItemValue, e);
+			
+			String[] entryNameTokens = selectedItemValue.split("\\s+");
+			
+			boolean isEmptySelection = entryNameTokens.length < 3;
+			if (isEmptySelection) {
+				return; 
+			}
+
+			String configName = getConfigurationName(entryNameTokens);
 			HarpoonConfigurationsUtil.runConfig(configName, e);
 		};
 	}
 	
 	
-	public static String getConfigurationName(String gradlePath, AnActionEvent e) {
-		String[] tokens = gradlePath.split("\\s+");
-		return tokens[1] + " " + tokens[2];
+	private static String getConfigurationName(String[] entryNameTokens) {
+		return entryNameTokens[1] + " " + entryNameTokens[2];
 	}
+	
+	
+	
 }

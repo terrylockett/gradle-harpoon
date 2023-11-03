@@ -48,6 +48,14 @@ public class GradleTasksActionGroup extends ActionGroup {
 
 		if (rootGradleProject.extensions.containsKey(gradleModuleName)) {
 			var gradleExtensionData = rootGradleProject.extensions.get(gradleModuleName);
+			var taskMap = gradleExtensionData.tasksMap;
+			
+			for(var taskEntry : taskMap.entrySet()){
+				var task = taskEntry.getValue();
+				System.out.println("Task: " + taskEntry.getKey()+", " + task.name+", " + task.typeFqn);
+			}
+			
+			
 			var gradleTasks = gradleExtensionData.tasksMap.keySet();
 			taskNames.addAll(gradleTasks);
 		}
@@ -55,7 +63,7 @@ public class GradleTasksActionGroup extends ActionGroup {
 		return taskNames;
 	}
 	
-	private String getModuleGradlePath(AnActionEvent e, String modulePath) {
+	public static String getModuleGradlePath(AnActionEvent e, String modulePath) {
 		var gradleSettings = GradleSettings.getInstance(e.getProject());
 		var gradleProjectSettings = gradleSettings.getLinkedProjectsSettings().stream().findFirst().get();
 		String path = gradleProjectSettings.getExternalProjectPath();
