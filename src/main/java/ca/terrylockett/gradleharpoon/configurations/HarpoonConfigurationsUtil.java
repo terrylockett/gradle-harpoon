@@ -5,10 +5,12 @@ import com.intellij.execution.ProgramRunnerUtil;
 import com.intellij.execution.RunManager;
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.module.ModuleManager;
 import org.jetbrains.plugins.gradle.service.execution.GradleExternalTaskConfigurationType;
 import org.jetbrains.plugins.gradle.service.execution.GradleRunConfiguration;
 import org.jetbrains.plugins.gradle.settings.GradleExtensionsSettings;
 import org.jetbrains.plugins.gradle.settings.GradleSettings;
+import org.jetbrains.plugins.gradle.util.GradleUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -68,7 +70,24 @@ public class HarpoonConfigurationsUtil {
 		var gradleRunConfiguration = (GradleRunConfiguration) runAndConfig.getConfiguration();
 		gradleRunConfiguration.setName(HarpoonConfigurationsUtil.getConfigurationName(modulePath, taskName, e));
 		gradleRunConfiguration.setRawCommandLine(taskName);
-		gradleRunConfiguration.getSettings().setExternalProjectPath(modulePath);
+
+		var modules = ModuleManager.getInstance(e.getProject()).getModules();
+		String runConfigPath = "";
+
+		if(modulePath.equals(":")) {
+			runConfigPath = GradleUtil.findGradleModuleData(modules[0]).getData().getLinkedExternalProjectPath();
+		}
+
+		for(var module : modules) {
+			var gradleModuleData = GradleUtil.findGradleModuleData(module).getData();
+			if(gradleModuleData.getId().equals(modulePath)) {
+				runConfigPath = gradleModuleData.getLinkedExternalProjectPath();
+				System.out.println("path for module: " + runConfigPath);
+				break;
+			}
+		}
+
+		gradleRunConfiguration.getSettings().setExternalProjectPath(runConfigPath);
 		
 		if(isTestTask(e, modulePath, taskName)) {
 			gradleRunConfiguration.setRunAsTest(true);

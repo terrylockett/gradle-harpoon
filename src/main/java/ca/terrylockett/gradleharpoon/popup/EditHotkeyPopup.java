@@ -27,7 +27,7 @@ public class EditHotkeyPopup extends AnAction {
 				.setVisibleRowCount(NUMBER_OF_BOOKMARKS)
 				.setSelectionMode(SINGLE_SELECTION)
 				.setItemChosenCallback(item -> JBPopupFactory.getInstance()
-						.createActionGroupPopup("Harpoon", getNextPopupEntries(item, e), e.getDataContext(),
+						.createActionGroupPopup("Harpoon", getModulesList(item), e.getDataContext(),
 								JBPopupFactory.ActionSelectionAid.SPEEDSEARCH, false)
 						.showInFocusCenter())
 				.setSelectionMode(SINGLE_SELECTION)
@@ -37,19 +37,10 @@ public class EditHotkeyPopup extends AnAction {
 	}
 
 
-	private ActionGroup getNextPopupEntries(String selectionValue, AnActionEvent e) {
+	private GradleModuleActionGroup getModulesList(String selectionValue) {
 		String indexStr = selectionValue.substring(0, 1);
 		int index = Integer.parseInt(indexStr);
-		GradleModuleActionGroup modulesGroup = new GradleModuleActionGroup(index);
-
-		boolean isMultiModuleProject = modulesGroup.getChildren(e).length > 1;
-		if (isMultiModuleProject) {
-			return new GradleModuleActionGroup(index);
-		}
-		
-		String projectPath = GradleModuleActionGroup.getModulePaths(e).get(0);
-		HarpoonConfigurationsUtil.setHarpoonModule(e, projectPath, index);
-		return new GradleTasksActionGroup(projectPath, index);
+		return new GradleModuleActionGroup(index);
 	}
 
 }
