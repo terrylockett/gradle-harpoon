@@ -1,15 +1,12 @@
 package ca.terrylockett.gradleharpoon.popup;
 
-import ca.terrylockett.gradleharpoon.actiongroups.GradleTasksActionGroup;
 import ca.terrylockett.gradleharpoon.configurations.HarpoonConfigurationsUtil;
 import ca.terrylockett.gradleharpoon.actiongroups.GradleModuleActionGroup;
-import com.intellij.openapi.actionSystem.ActionGroup;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static ca.terrylockett.gradleharpoon.configurations.HarpoonConfigurationsUtil.NUMBER_OF_BOOKMARKS;
@@ -33,7 +30,7 @@ public class EditHotkeyPopup extends AnAction {
 				.setSelectionMode(SINGLE_SELECTION)
 				.setTitle("Edit Harpoon Hotkeys")
 				.createPopup()
-				.showInFocusCenter();
+				.showCenteredInCurrentWindow(e.getProject());
 	}
 
 

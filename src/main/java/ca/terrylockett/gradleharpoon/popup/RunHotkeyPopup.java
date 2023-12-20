@@ -26,30 +26,26 @@ public class RunHotkeyPopup extends AnAction {
 				.setSelectionMode(SINGLE_SELECTION)
 				.setTitle("Harpoon Select")
 				.createPopup()
-				.showInFocusCenter();
+				.showCenteredInCurrentWindow(e.getProject());
 	}
 
 
 	private Consumer<String> getCallBack(AnActionEvent e) {
 		return selectedItemValue -> {
-			
 			String[] entryNameTokens = selectedItemValue.split("\\s+");
-			
 			boolean isEmptySelection = entryNameTokens.length < 3;
 			if (isEmptySelection) {
-				return; 
+				return;
 			}
-
 			String configName = getConfigurationName(entryNameTokens);
 			HarpoonConfigurationsUtil.runConfig(configName, e);
 		};
 	}
-	
-	
+
+
 	private static String getConfigurationName(String[] entryNameTokens) {
 		return entryNameTokens[1] + " " + entryNameTokens[2];
 	}
-	
-	
-	
+
+
 }
