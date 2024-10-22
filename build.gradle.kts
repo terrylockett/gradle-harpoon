@@ -1,6 +1,6 @@
 plugins {
     id("java")
-    id("org.jetbrains.kotlin.jvm") version "1.9.0"
+    id("org.jetbrains.kotlin.jvm") version "1.9.25"
     id("org.jetbrains.intellij") version "1.15.0"
 //    id("me.qoomon.git-versioning") version "6.4.2"
 }
@@ -9,8 +9,9 @@ group = "ca.terrylockett"
 //version = "0.1.0"
 
 if (!project.hasProperty("isRelease")) {
-    version = "${version}-SNAPSHOT"    
+    version = "${version}-SNAPSHOT"
 }
+
 
 repositories {
     mavenCentral()
@@ -19,7 +20,7 @@ repositories {
 // Configure Gradle IntelliJ Plugin
 // Read more: https://plugins.jetbrains.com/docs/intellij/tools-gradle-intellij-plugin.html
 intellij {
-    version.set("2023.2.4")
+    version.set("2023.3.8")
     type.set("IC") // Target IDE Platform
 
     plugins.set(listOf("com.intellij.gradle"))
@@ -36,8 +37,8 @@ tasks {
     }
 
     patchPluginXml {
-        sinceBuild.set("232")
-        untilBuild.set("233.*")
+        sinceBuild.set("233")
+        untilBuild.set("242.*")
     }
 
     signPlugin {
