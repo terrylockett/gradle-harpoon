@@ -8,8 +8,8 @@ IntelliJ plugin to bookmark and run gradle tasks.
 
 ## Installation
 Two options:
-### Pre Build Plugin:
-1. Download plugin zip from the newest [Release](https://github.com/terrylockett/gradle-harpoon/releases/tag/v1.1.0).
+### Pre Built Plugin:
+1. Download plugin zip from the latest [Release](https://github.com/terrylockett/gradle-harpoon/releases/).
 2. `Settings-> plugins -> Install Plugin from Disk` with the Zip
 ### Build form Source
 1. Clone project
