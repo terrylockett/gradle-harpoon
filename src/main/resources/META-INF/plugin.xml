@@ -32,16 +32,16 @@
                 text="Gradle Harpoon"
                 popup="true">
             <add-to-group group-id="ToolsMenu" anchor="last"/>
-            <action id="ca.terrylockett.gradleharpoon.popup.EditHotkeyPopup"
-                    class="ca.terrylockett.gradleharpoon.popup.EditHotkeyPopup" text="Edit Harpoon Config"
+            <action id="ca.terrylockett.gradleharpoon.window.EditHarpoonWindow"
+                    class="ca.terrylockett.gradleharpoon.window.EditHarpoonWindow" text="Edit Harpoon Config"
                     description="Open edit harpoon window">
             </action>
-            <action id="ca.terrylockett.gradleharpoon.popup.RunHotkeyPopup"
-                    class="ca.terrylockett.gradleharpoon.popup.RunHotkeyPopup" text="Run Harpoon Config"
+            <action id="ca.terrylockett.gradleharpoon.window.RunHarpoonWindow"
+                    class="ca.terrylockett.gradleharpoon.window.RunHarpoonWindow" text="Run Harpoon Config"
                     description="Open run harpoon window">
             </action>
-            <action id="ca.terrylockett.gradleharpoon.action.ResetHarpoonConfigs"
-                    class="ca.terrylockett.gradleharpoon.action.ResetHarpoonConfigs" text="Reset Harpoon Configs"
+            <action id="ca.terrylockett.gradleharpoon.action.ResetHarpoonConfigurations"
+                    class="ca.terrylockett.gradleharpoon.action.ResetHarpoonConfigurations" text="Reset Harpoon Configs"
                     description="Clears the bookmarked configs">
             </action>
         </group>
